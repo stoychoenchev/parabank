@@ -15,7 +15,7 @@ exports.RegisterPage = class RegisterPage {
         this.passwordField = this.page.locator("input[id='customer.password']");
         this.confirmPasswordField = this.page.locator("input[id='repeatedPassword']");
         this.registrationButton = this.page.locator("input[value='Register']");
-        this.registerPageAddress = "https://parabank.parasoft.com/parabank/register.htm";
+        this.registerPageAddress = "http://localhost:9090/parabank/register.htm";
     }
 
 
@@ -74,7 +74,7 @@ exports.RegisterPage = class RegisterPage {
     }
 
     async fillUserNameField(){
-       await this.userNameField.fill("stoycho111");
+       await this.userNameField.fill("stoycho1111");
     }
 
     async fillPasswordField(){

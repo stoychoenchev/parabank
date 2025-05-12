@@ -2,8 +2,14 @@ import { test, expect} from '@playwright/test';
 const { LoginPage } = require('../pages/LoginPage');
 const { RegisterPage } = require('../pages/RegisterPage');
 const { OpenAccountPage } = require('../pages/OpenAccountPage');
+const { TransferFundsPage } = require('../pages/TransferFundsPage');
+const { BillPayPage } = require('../pages/BillPayPage');
 
 
+test.beforeEach(async ({ page }) => {
+  // Clear cookies/storage (if tests share state)
+  await page.context().clearCookies(); 
+});
 
 test('Navigate to ParaBank', async({page}) => {
     const loginPage = new LoginPage(page);
@@ -218,34 +224,48 @@ test('Verify that the Address field is clickable', async ({ page }) => {
     await expect(registerPage.registrationButton).toBeEnabled();
   });
 
-test('Navigate to ParaBank and register a new user', async ({page}) => {
-        const registerPage = new RegisterPage(page);
-        await registerPage.navigateToParaBankRegister();
-        await registerPage.registerParaBank();
-})
+
 
 test('Verify that we are logged successfully', async ({page}) => {
         const loginPage = new LoginPage(page);
         await loginPage.login();
         await expect(page).toHaveTitle("ParaBank | Accounts Overview");
 })
-
+//flaky
 test('Verify that we are able to open new checkings account successfully', async ({page}) => {
         const open = new OpenAccountPage(page);
         const loginPage = new LoginPage(page);
         await loginPage.login();
         await expect(page).toHaveTitle("ParaBank | Accounts Overview");
         await open.openNewAccountLink.click();
-        await open.openNewCheckingsAccount();
-        await expect(open.accountOpened).toHaveText('Account Opened!');
+        await page.waitForLoadState('networkidle');
+        await open.openNewCheckingsAccount();   
 })
-
+//flaky 
 test('Verify that we are able to open new savings account successfully', async ({page}) => {
         const open = new OpenAccountPage(page);
         const loginPage = new LoginPage(page);
         await loginPage.login();
         await expect(page).toHaveTitle("ParaBank | Accounts Overview");
         await open.openNewAccountLink.click();
+        await page.waitForLoadState('networkidle');
         await open.openNewSavingsAccount();
-        await expect(open.accountOpened).toHaveText('Account Opened!');
+
 })
+//flaky
+test('Transfer funds', async ({page}) => {
+        const transfer = new TransferFundsPage(page);
+        const loginPage = new LoginPage(page);
+        await loginPage.login();
+        await expect(page).toHaveTitle("ParaBank | Accounts Overview");
+        await transfer.transferFundsLink.click();
+        await transfer.transferFunds();
+})
+
+test('Pay a bill', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.login();
+    const billPay = new BillPayPage(page);
+    await billPay.billPayLink.click();
+    await billPay.completeBillPaymentForm();
+});

@@ -2,9 +2,9 @@ exports.LoginPage = class LoginPage {
 
     constructor(page){
         this.page = page;
-        this.paraBankAddress = "https://parabank.parasoft.com/parabank/index.htm";
-        this.userName = "stoycho11";
-        this.password = "parolkata123.";
+        this.paraBankAddress = "http://localhost:9090/parabank/index.htm";
+        this.userName = "john";
+        this.password = "demo";
         this.userNameLoginField = this.page.locator("input[name='username']");
         this.passwordLoginField = this.page.locator("input[name='password']");
         this.logginButton = this.page.locator("input[value='Log In']");
